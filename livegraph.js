@@ -94,7 +94,7 @@ net.createServer(function (socket) {
 	
 	// The server sends a 8-bit byte value for each sample. Javascript doesn't really like
 	// binary values, so we use setEncoding to read each byte of a data as 2 hex digits instead.
-	socket.setEncoding('hex');
+	socket.setEncoding('utf8');
 	
 	socket.on('data', function (data) {
 		// We received data on this connection. Send it to all of the SSE clients.
