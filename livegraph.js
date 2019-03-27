@@ -3,12 +3,15 @@
 //
 // Make sure you're in the directory containing livegraph.js and the public directory that contains the
 
+var log = require('log-to-file');
 var http = require('http');
 var url = require('url');
 var fs = require('fs');
 var path = require('path');
 var baseDirectory = path.join(__dirname, "public");  
 var net = require('net');
+
+
 
 // httpPort is the port the web browser is listening on. You might open in your browser:
 // http://localhost:8080/
@@ -100,6 +103,11 @@ net.createServer(function (socket) {
 		// We received data on this connection. Send it to all of the SSE clients.
         console.log('data ' + data);
         log('data ' + data);
+		fs.appendFile("logfile", `${data}\n`, function(err) {
+    if(err) {
+        return console.log(err);
+    }
+}); 
 		sendDataToClients(data);
 	});
 	socket.on('end', function () {

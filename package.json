@@ -1,0 +1,23 @@
+{
+  "name": "photon-web-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "livegraph.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NuhaAhmed/Photon-Web-Server.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NuhaAhmed/Photon-Web-Server/issues"
+  },
+  "homepage": "https://github.com/NuhaAhmed/Photon-Web-Server#readme",
+  "dependencies": {
+    "log-to-file": "^1.3.0"
+  }
+}
