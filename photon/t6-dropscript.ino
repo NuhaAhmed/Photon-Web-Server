@@ -35,7 +35,8 @@ const unsigned long SEND_PERIOD_MS = 20;
 const int INPUT_PIN = A0;
 // IP address and port of the server. Note that the node server uses two ports - one for the web browser
 // and a raw TCP port for receiving data. This is the port number for the data port, not the web server port!
-IPAddress serverAddress(192,168,2,4);
+// IPAddress serverAddress(192,168,2,4);
+byte serverAddress[] = {10,25,83,53};
 int serverPort = 8081;
 // Finite state machine states
 enum {CONNECT_STATE, SEND_DATA_STATE};
@@ -141,27 +142,35 @@ void loop()
     Serial.println("*****************************");
     
     
-    Particle.publish("maker_girbil", String(actualmagdiff)); // Publishes data
-    send("maker_girbil", actualmagdiff);
+    // Particle.publish("maker_girbil", String(actualmagdiff)); // Publishes data
     
+    // Particle.publish("Debug-ServerAddress", serverAddress[0]);
+	Particle.publish("Debug-Port", String(serverPort));
+    send(10);
+    send(30);
 }
 
-void send(String message, float data) {
+void send(float data) {
+    Particle.publish("Debug", "Entered");
+    Particle.publish("Debug-State", String(state));
 	switch(state) {
 	case CONNECT_STATE:
-		Serial.println("connecting...");
 		if (client.connect(serverAddress, serverPort)) {
 			state = SEND_DATA_STATE;
+			Particle.publish("Debug", "Connection Passed");
 		}
 		else {
 			Serial.println("connection failed");
-			delay(15000);
+			Particle.publish("Debug", "Connection Failed");
+			delay(1000);
 		}
 		break;
 
 	case SEND_DATA_STATE:
+	
+        Particle.publish("Debug", "SEND DATA STATE");
 		if (client.connected()) {
-			// Discard any incoming data; there shouldn't be any
+			// Discard any incoming data; there shouldn't be any		
 			while(client.available()) {
 				client.read();
 			}
@@ -171,7 +180,9 @@ void send(String message, float data) {
 				lastSend = millis();
                 
                 // Create formatted string with message and data
-                client.write(String::format("%s: %f", message, data));
+                // client.write(String::format("%s: %f", message, data));
+                Particle.publish("Debug", "Sending Data");
+                client.write(data);
 			}
 		}
 		else {
