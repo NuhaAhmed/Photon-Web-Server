@@ -1,5 +1,3 @@
-import Chartist from 'chartist'
-
 // Data samples are stored here
 var dataSet = [];
 
@@ -35,17 +33,7 @@ function handleData(data) {
     var canvas = document.getElementById("canvas");
     var ctx = canvas.getContext("2d");
     
-    new Chartist.Line('.ct-chart', {
-        labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-        series: [
-            [12, 9, 7, 8, 5],
-        ]
-        }, {
-        fullWidth: true,
-        chartPadding: {
-            right: 40
-        }
-    });
+    
 	
 	// Add to the data set, remove from the left if it gets wider than the canvas
 	dataSet.push(data);
@@ -68,9 +56,24 @@ function handleData(data) {
 
 		ctx.fillRect(ii, yy, 1, 1);
     }
-    
-    
-	
-	
+
+    var data = {
+        labels: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
+        series: [
+            [dataSet[dataSet.length - 10], dataSet[dataSet.length - 9], dataSet[dataSet.length - 8], dataSet[dataSet.length - 7], dataSet[dataSet.length - 6],
+            dataSet[dataSet.length - 5], dataSet[dataSet.length - 4], dataSet[dataSet.length - 3], dataSet[dataSet.length - 2], dataSet[dataSet.length - 1]],
+        ]
+    };
+      
+    // As options we currently only set a static size of 300x200 px. We can also omit this and use aspect ratio containers
+    // as you saw in the previous example
+    var options = {
+        fullWidth: true,
+        height: 255,
+        high: 255,
+        low: 0,
+    };
+
+    new Chartist.Line('.ct-chart', data, options);
 }
 
