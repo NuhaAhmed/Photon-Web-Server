@@ -98,7 +98,7 @@ net.createServer(function (socket) {
 	
 	socket.on('data', function (data) {
 		// We received data on this connection. Send it to all of the SSE clients.
-		// console.log('data ' + data);
+		console.log('data ' + data);
 		sendDataToClients(data);
 	});
 	socket.on('end', function () {
