@@ -1,3 +1,4 @@
+import Chartist from 'chartist'
 
 // Data samples are stored here
 var dataSet = [];
@@ -25,12 +26,26 @@ document.addEventListener( 'DOMContentLoaded', function () {
 
 
 function handleData(data) {
-	// data is a number value (currently 0 - 255)
-	
-	var canvas = document.getElementById("canvas");
-	var ctx = canvas.getContext("2d");
-	
-	// console.log(data);
+    // console.log(data);
+
+    // Display data stream onto the page
+    var dataStream = document.getElementById("dataStream");
+    dataStream.innerHTML = `${data}`;
+
+    var canvas = document.getElementById("canvas");
+    var ctx = canvas.getContext("2d");
+    
+    new Chartist.Line('.ct-chart', {
+        labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+        series: [
+            [12, 9, 7, 8, 5],
+        ]
+        }, {
+        fullWidth: true,
+        chartPadding: {
+            right: 40
+        }
+    });
 	
 	// Add to the data set, remove from the left if it gets wider than the canvas
 	dataSet.push(data);
@@ -52,7 +67,9 @@ function handleData(data) {
 		var yy = 255 - dataSet[ii];
 
 		ctx.fillRect(ii, yy, 1, 1);
-	}
+    }
+    
+    
 	
 	
 }

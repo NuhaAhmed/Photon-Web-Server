@@ -2,8 +2,8 @@
 //  main.cpp
 //  t6-dropscript
 //
-//  Created by Nuha on 3/25/19.
-//  Copyright © 2019 Nuha. All rights reserved.
+//  Created by Nuha and Daniel :) on 3/25/19.
+//  Copyright © 2019 Nuha and Daniel :) All rights reserved.
 //
 
 #include "Particle.h"
@@ -30,9 +30,7 @@ float magdiff, actualmagdiff;
 
 /**** BEGIN SERVER INIT ****/
 // How often to send samples in milliseconds
-const unsigned long SEND_PERIOD_MS = 20;
-// Analog input pin that's connected to a potentiometer in the test
-const int INPUT_PIN = A0;
+const unsigned long SEND_PERIOD_MS = 50;
 // IP address and port of the server. Note that the node server uses two ports - one for the web browser
 // and a raw TCP port for receiving data. This is the port number for the data port, not the web server port!
 // IPAddress serverAddress(192,168,2,4);
@@ -54,6 +52,7 @@ void setup()
 // Read, scale, and print accelerometer data
 void loop()
 {
+    Particle.publish("Debug-MainLoop", "Enteerred");
     /*** RAW ****/
     // Get raw accelerometer data for each axis; "before" data
     int rawXb = analogRead(A0);
@@ -107,23 +106,23 @@ void loop()
     }
     
     // Print out scaled X,Y,Z accelerometer readings Before Hit
-    Serial.print("X Vector Before: "); Serial.print(scaledXb); Serial.println(" g");
-    Serial.print("Y Vector Before: "); Serial.print(scaledYb); Serial.println(" g");
-    Serial.print("Z Vector Before: "); Serial.print(scaledZb); Serial.println(" g");
-    Serial.println("*****************************");
-    Serial.print("Magnitude Before: "); Serial.print(scaledmagnitudeb); Serial.println(" g"); // Calculate Before Magnitude
-    Serial.println("*****************************");
-    Serial.println("*****************************");
+    // Serial.print("X Vector Before: "); Serial.print(scaledXb); Serial.println(" g");
+    // Serial.print("Y Vector Before: "); Serial.print(scaledYb); Serial.println(" g");
+    // Serial.print("Z Vector Before: "); Serial.print(scaledZb); Serial.println(" g");
+    // Serial.println("*****************************");
+    // Serial.print("Magnitude Before: "); Serial.print(scaledmagnitudeb); Serial.println(" g"); // Calculate Before Magnitude
+    // Serial.println("*****************************");
+    // Serial.println("*****************************");
     
     
     // Print out scaled X,Y,Z accelerometer readings After Hit
-    Serial.print("X Vector After: "); Serial.print(scaledXa); Serial.println(" g");
-    Serial.print("Y Vector After: "); Serial.print(scaledYa); Serial.println(" g");
-    Serial.print("Z Vector After: "); Serial.print(scaledZa); Serial.println(" g");
-    Serial.println("*****************************");
-    Serial.print("Magnitude After: "); Serial.print(scaledmagnitudea); Serial.println(" g"); // Calculated After Magnitude
-    Serial.println("*****************************");
-    Serial.println("*****************************");
+    // Serial.print("X Vector After: "); Serial.print(scaledXa); Serial.println(" g");
+    // Serial.print("Y Vector After: "); Serial.print(scaledYa); Serial.println(" g");
+    // Serial.print("Z Vector After: "); Serial.print(scaledZa); Serial.println(" g");
+    // Serial.println("*****************************");
+    // Serial.print("Magnitude After: "); Serial.print(scaledmagnitudea); Serial.println(" g"); // Calculated After Magnitude
+    // Serial.println("*****************************");
+    // Serial.println("*****************************");
     
     magdiff=(scaledmagnitudeb-scaledmagnitudea); // This takes difference in two readings
     actualmagdiff=abs(magdiff);
@@ -137,22 +136,18 @@ void loop()
     }
     
     // Prints out Final or Actual Mantiude difference
-    Serial.print("Actual Magnitude: "); Serial.print(actualmagdiff, 5); Serial.println(" g"); //calculated magnitude
-    Serial.println("*****************************");
-    Serial.println("*****************************");
+    // Serial.print("Actual Magnitude: "); Serial.print(actualmagdiff, 5); Serial.println(" g"); //calculated magnitude
+    // Serial.println("*****************************");
+    // Serial.println("*****************************");
     
     
     // Particle.publish("maker_girbil", String(actualmagdiff)); // Publishes data
-    
-    // Particle.publish("Debug-ServerAddress", serverAddress[0]);
-	Particle.publish("Debug-Port", String(serverPort));
-    send(10);
-    send(30);
+    send(actualmagdiff);
+    // send(10);
+    // send(30);
 }
 
 void send(float data) {
-    Particle.publish("Debug", "Entered");
-    Particle.publish("Debug-State", String(state));
 	switch(state) {
 	case CONNECT_STATE:
 		if (client.connect(serverAddress, serverPort)) {
@@ -161,14 +156,11 @@ void send(float data) {
 		}
 		else {
 			Serial.println("connection failed");
-			Particle.publish("Debug", "Connection Failed");
 			delay(1000);
 		}
 		break;
 
 	case SEND_DATA_STATE:
-	
-        Particle.publish("Debug", "SEND DATA STATE");
 		if (client.connected()) {
 			// Discard any incoming data; there shouldn't be any		
 			while(client.available()) {
@@ -181,13 +173,12 @@ void send(float data) {
                 
                 // Create formatted string with message and data
                 // client.write(String::format("%s: %f", message, data));
-                Particle.publish("Debug", "Sending Data");
-                client.write(data);
+                client.write(String(data));         
 			}
 		}
 		else {
 			// Disconnected
-			Serial.println("disconnected...");
+            Particle.publish("Disconnected");
 			client.stop();
 			state = CONNECT_STATE;
 			delay(5000);

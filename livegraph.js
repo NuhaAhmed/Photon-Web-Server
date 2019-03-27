@@ -104,10 +104,10 @@ net.createServer(function (socket) {
         console.log('data ' + data);
         log('data ' + data);
 		fs.appendFile("logfile", `${data}\n`, function(err) {
-    if(err) {
-        return console.log(err);
-    }
-}); 
+            if(err) {
+                return console.log(err);
+            }
+        }); 
 		sendDataToClients(data);
 	});
 	socket.on('end', function () {
