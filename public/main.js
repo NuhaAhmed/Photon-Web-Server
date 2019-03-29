@@ -24,7 +24,7 @@ document.addEventListener( 'DOMContentLoaded', function () {
 
 
 function handleData(data) {
-    // console.log(data);
+    console.log(data);
 
     // Display data stream onto the page
     var dataStream = document.getElementById("dataStream");
@@ -33,8 +33,6 @@ function handleData(data) {
     var canvas = document.getElementById("canvas");
     var ctx = canvas.getContext("2d");
     
-    
-	
 	// Add to the data set, remove from the left if it gets wider than the canvas
 	dataSet.push(data);
 	if (dataSet.length > (canvas.width - 1)) {
@@ -57,11 +55,18 @@ function handleData(data) {
 		ctx.fillRect(ii, yy, 1, 1);
     }
 
+    // Chartist js stuff
+
+    // var chartData = [];
+    // for(var i=100; i>=0; i++) {
+    //     chartData[100-i] = dataSet[dataSet.length - i]
+    // }
+
     var data = {
-        labels: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
+        // labels: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
         series: [
             [dataSet[dataSet.length - 10], dataSet[dataSet.length - 9], dataSet[dataSet.length - 8], dataSet[dataSet.length - 7], dataSet[dataSet.length - 6],
-            dataSet[dataSet.length - 5], dataSet[dataSet.length - 4], dataSet[dataSet.length - 3], dataSet[dataSet.length - 2], dataSet[dataSet.length - 1]],
+            dataSet[dataSet.length - 5], dataSet[dataSet.length - 4], dataSet[dataSet.length - 3], dataSet[dataSet.length - 2]],
         ]
     };
       

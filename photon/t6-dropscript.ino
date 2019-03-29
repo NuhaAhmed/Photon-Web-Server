@@ -142,12 +142,10 @@ void loop()
     
     
     // Particle.publish("maker_girbil", String(actualmagdiff)); // Publishes data
-    send(actualmagdiff);
-    // send(10);
-    // send(30);
+    send("maker_girbil", actualmagdiff);
 }
 
-void send(float data) {
+void send(String message, float data) {
 	switch(state) {
 	case CONNECT_STATE:
 		if (client.connect(serverAddress, serverPort)) {
@@ -172,8 +170,8 @@ void send(float data) {
 				lastSend = millis();
                 
                 // Create formatted string with message and data
-                // client.write(String::format("%s: %f", message, data));
-                client.write(String(data));         
+                client.write(String::format("%s: %f", message, data));
+                // client.write(String(data));         
 			}
 		}
 		else {
