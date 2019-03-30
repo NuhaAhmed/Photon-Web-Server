@@ -57,16 +57,15 @@ function handleData(data) {
 
     // Chartist js stuff
 
-    // var chartData = [];
-    // for(var i=100; i>=0; i++) {
-    //     chartData[100-i] = dataSet[dataSet.length - i]
-    // }
+    var chartData = [];
+    for(var i=100; i>=0; i--) {
+        chartData[100-i] = dataSet[dataSet.length - i]
+    }
 
     var data = {
         // labels: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
         series: [
-            [dataSet[dataSet.length - 10], dataSet[dataSet.length - 9], dataSet[dataSet.length - 8], dataSet[dataSet.length - 7], dataSet[dataSet.length - 6],
-            dataSet[dataSet.length - 5], dataSet[dataSet.length - 4], dataSet[dataSet.length - 3], dataSet[dataSet.length - 2]],
+            chartData,
         ]
     };
       
@@ -77,6 +76,10 @@ function handleData(data) {
         height: 255,
         high: 255,
         low: 0,
+        axisX: {
+            showLabel: false,
+            showGrid: false
+        }
     };
 
     new Chartist.Line('.ct-chart', data, options);

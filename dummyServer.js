@@ -37,7 +37,7 @@ client.connect(8081, '192.168.229.132', function() {
 });
 setInterval(function(){ 
     client.write("Message: " + String(Math.floor((Math.random() * 255) + 1)));  
-}, 250);
+}, 100);
 
 client.on('data', function(data) {
 	console.log('Received: ' + data);
