@@ -145,6 +145,49 @@ void loop()
     send("maker_girbil", actualmagdiff);
 }
 
+
+
+/******** SERVER SEND FUNCTIONS ********/
+void send(String message) {
+	switch(state) {
+	case CONNECT_STATE:
+		if (client.connect(serverAddress, serverPort)) {
+			state = SEND_DATA_STATE;
+			Particle.publish("Debug", "Connection Passed");
+		}
+		else {
+			Serial.println("connection failed");
+			Particle.publish("connection failed");
+			delay(1000);
+		}
+		break;
+
+	case SEND_DATA_STATE:
+		if (client.connected()) {
+			// Discard any incoming data; there shouldn't be any		
+			while(client.available()) {
+				client.read();
+			}
+
+			// Send data up to the server
+			if (millis() - lastSend >= SEND_PERIOD_MS) {
+				lastSend = millis();
+                
+                // Create formatted string with message
+                client.write(message);
+			}
+		}
+		else {
+			// Disconnected
+            Particle.publish("Disconnected");
+			client.stop();
+			state = CONNECT_STATE;
+			delay(5000);
+		}
+		break;
+	}
+}
+
 void send(String message, float data) {
 	switch(state) {
 	case CONNECT_STATE:
@@ -154,6 +197,7 @@ void send(String message, float data) {
 		}
 		else {
 			Serial.println("connection failed");
+			Particle.publish("connection failed");
 			delay(1000);
 		}
 		break;
@@ -171,7 +215,6 @@ void send(String message, float data) {
                 
                 // Create formatted string with message and data
                 client.write(String::format("%s: %f", message, data));
-                // client.write(String(data));         
 			}
 		}
 		else {
@@ -184,5 +227,3 @@ void send(String message, float data) {
 		break;
 	}
 }
-
-
