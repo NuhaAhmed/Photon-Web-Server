@@ -28,13 +28,12 @@ example code from
 http://www.hacksparrow.com/tcp-socket-programming-in-node-js.html.) */
 
 var net = require('net');
-
-
 var client = new net.Socket();
 
 client.connect(8081, '192.168.229.135', function() {
     console.log('Connected'); 
 });
+
 setInterval(function(){ 
     client.write("Message: " + String(Math.floor((Math.random() * 255) + 1)));  
     // client.write("Hello");  
