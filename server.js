@@ -107,7 +107,10 @@ net.createServer(function (socket) {
         var dataSplit = data.split(" ");
 
         log(data, logfile);
-		sendDataToClients(dataSplit[1]);
+        // console.log(typeof dataSplit[1]);
+        if(typeof dataSplit[1] !== 'undefined') {
+            sendDataToClients(dataSplit[1]);
+        }
 	});
 	socket.on('end', function () {
 		console.log('data connection ended');

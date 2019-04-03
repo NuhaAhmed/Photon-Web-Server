@@ -32,11 +32,12 @@ var net = require('net');
 
 var client = new net.Socket();
 
-client.connect(8081, '192.168.229.132', function() {
+client.connect(8081, '192.168.229.135', function() {
     console.log('Connected'); 
 });
 setInterval(function(){ 
     client.write("Message: " + String(Math.floor((Math.random() * 255) + 1)));  
+    // client.write("Hello");  
 }, 100);
 
 client.on('data', function(data) {
