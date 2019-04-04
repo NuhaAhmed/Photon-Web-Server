@@ -93,9 +93,10 @@ http.createServer(function (request, response) {
 // Start a TCP Server. This is what receives data from the Particle Photon
 // https://gist.github.com/creationix/707146
 net.createServer(function (socket) {
+    console.log('data connection started from ' + socket.remoteAddress);
+    
     // Create a new log file
-    var logfile = `logs/photon_log_${Date().toString()}`
-	console.log('data connection started from ' + socket.remoteAddress);
+    var logfile = `logs/photon_log_${Date.now().toString()}.txt`
 	
 	// The server sends a 8-bit byte value for each sample. Javascript doesn't really like
 	// binary values, so we use setEncoding to read each byte of a data as 2 hex digits instead.
@@ -104,11 +105,15 @@ net.createServer(function (socket) {
 	socket.on('data', function (data) {
 		// We received data on this connection. Send it to all of the SSE clients.
         console.log(data);
+
+        // Split on whitespace
         var dataSplit = data.split(" ");
 
+        // Log data
         log(data, logfile);
-        // console.log(typeof dataSplit[1]);
-        if(typeof dataSplit[1] !== 'undefined') {
+        
+        // If dataSplit.length is 2, its data
+        if(dataSplit.length == 2) {
             sendDataToClients(dataSplit[1]);
         }
 	});

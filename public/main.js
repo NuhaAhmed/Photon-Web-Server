@@ -24,7 +24,7 @@ document.addEventListener( 'DOMContentLoaded', function () {
 
 
 function handleData(data) {
-    console.log(data);
+    // console.log(data);
 
     // Display data stream onto the page
     var dataStream = document.getElementById("dataStream");
